@@ -159,14 +159,14 @@ class MY_Model extends CI_Model
     }
 
     // Update ~ optionally use `LIKE`, or `WHERE` ~ defaults to `WHERE`
-    protected function update($filter,$data,$is_strict=TRUE)
+    protected function update($filters,$data,$is_strict=TRUE)
     {
         $this->_get_filter_query($fitlers,$is_strict);
         return $this->db->update($this->table_name,$data);
     }
 
     // Delete
-    protected function delete($filter,$is_strict=TRUE)
+    protected function delete($filters,$is_strict=TRUE)
     {
         $this->_get_filter_query($fitlers,$is_strict);
         return $this->db->delete($this->table_name);
