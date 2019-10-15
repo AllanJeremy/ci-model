@@ -54,4 +54,7 @@ Ensure you don't make breaking changes. Any breaking changes should be marked as
 
 ## Bugs & Issues
 
-Feel free to use [github issues](https://www.github.com/AllanJeremy/ci-model) to post any issues you may find. Alternatively, [shoot me a message](mailto:dev@allanjeremy.com)
+Feel free to use [github issues](https://www.github.com/AllanJeremy/ci-model/issues) to post any issues you may find.
+Before submitting an issue, check through the issues to see if the issue has already been raised.
+
+Alternatively, [shoot me a message](mailto:dev@allanjeremy.com)
