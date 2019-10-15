@@ -13,7 +13,9 @@ In most cases, this means all you have to do is specify the table you want the m
 
 ## Usage
 
-Extend the MY_Model class when creating a model.
+1. Copy the core folder into your Codeigniter 3.x `application/` directory
+
+2. Extend the MY_Model class when creating a model.
 
 ```php
     class Custom_Model extends MY_Model
