@@ -152,7 +152,7 @@ class MY_Model extends CI_Model
     // Read
     public function read($filters,$limit=NULL,$offset=0,$is_strict=TRUE)
     {
-        $this->_get_filter_query($fitlers,$is_strict);
+        $this->_get_filter_query($filters,$is_strict);
         $this->use_limit($limit,$offset);
 
         return $this->db->get($this->table_name);
@@ -161,14 +161,14 @@ class MY_Model extends CI_Model
     // Update ~ optionally use `LIKE`, or `WHERE` ~ defaults to `WHERE`
     public function update($filters,$data,$is_strict=TRUE)
     {
-        $this->_get_filter_query($fitlers,$is_strict);
+        $this->_get_filter_query($filters,$is_strict);
         return $this->db->update($this->table_name,$data);
     }
 
     // Delete
     public function delete($filters,$is_strict=TRUE)
     {
-        $this->_get_filter_query($fitlers,$is_strict);
+        $this->_get_filter_query($filters,$is_strict);
         return $this->db->delete($this->table_name);
     }
 }
