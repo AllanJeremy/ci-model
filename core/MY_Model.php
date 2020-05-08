@@ -26,6 +26,13 @@ class MY_Model extends CI_Model
 		return $randomString.@$append;
 	}
 
+	// Generates a random 64 bit integer
+	private function _generate_random_integer($min_id_val = 100000, $max_id_val = 999999999)
+	{
+		$generated_int = rand($min_id_val,$max_id_val);
+		return $generated_int;
+	}
+
 	/** Get a table field  
 	 * @param string $table_name The name of the table the column/field belongs to
 	 * @param string $field_name The column/field name we want to get a reference to. Defaults to all columns in the specified table
@@ -54,19 +61,19 @@ class MY_Model extends CI_Model
 	}
 
 	/** Generate a random string id for the table specified 
-	 * @param string $table_name The name of the table we want to check for the id
 	 * @param mixed $id_column Name of the id column we are going to be checking
+	 * @param string $table_name The name of the table we want to check for the id
 	*/
-	public function generate_string_id($table_name,$id_column='id')
+	public function generate_string_id($id_column='id',$string_length=32)
     {		
-		$generated_id = $this->_generate_random_string();
+		$generated_id = $this->_generate_random_string('','',$string_length);
 		
-		$item_exists = $this->_id_exists($table_name,$id_column,$generated_id);
+		$item_exists = $this->_id_exists($this->table_name,$id_column,$generated_id);
 
 		// If id exists ~ try genrating again (recursively)
 		if($item_exists)
 		{//! Big O of log(N) ~ Consider finding optimization, possibly use dynamic programming
-			$generated_id = $this->generate_string_id($table_name,$id_column);
+			$generated_id = $this->generate_string_id($this->table_name,$id_column);
 		}
 		else
 		{
@@ -74,6 +81,26 @@ class MY_Model extends CI_Model
 		}
 	}
 
+		/** Generate a random integer id for the table specified 
+	 * @param string $table_name The name of the table we want to check for the id
+	 * @param mixed $id_column Name of the id column we are going to be checking
+	*/
+	public function generate_int_id($id_column='id',$min_id_val = 100000, $max_id_val = 999999999)
+    {		
+		$generated_id = $this->_generate_random_integer($min_id_val,$max_id_val);
+		
+		$item_exists = $this->_id_exists($this->table_name,$id_column,$generated_id);
+
+		// If id exists ~ try genrating again (recursively)
+		if($item_exists)
+		{//! Big O of log(N) ~ Consider finding optimization, possibly use dynamic programming
+			$generated_id = $this->generate_int_id($this->table_name,$id_column);
+		}
+		else
+		{
+			return $generated_id;
+		}
+	}
 	/**  Loops through multiple filters and generates relevant search filters 
 	 * @description Using this to allow for duplicate search query entries, eg. Using one search string to get multiple items
 	*/
@@ -138,9 +165,19 @@ class MY_Model extends CI_Model
     }
 
     // Create
-    public function create($data)
+    public function create($data,$id_options=['column'=>'id','should_generate'=>TRUE])
     {
-        return $this->db->insert($this->table_name,$data);
+		// Generate an integer id
+		if(@$id_options['should_generate'] === TRUE)
+		{
+			$data = $data ?? [];
+			$data[$id_options['column']] = $this->generate_int_id();
+		}
+
+		$this->db->insert($this->table_name,$data);
+		$insert_id = $this->db->insert_id();
+
+		return $insert_id;
     }
 
     // Insert batch ~ multiple records at once
